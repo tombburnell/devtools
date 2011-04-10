@@ -1,0 +1,14 @@
+#!/bin/bash
+module=${1%/}
+
+host=$2
+proj=$(mvn-get-proj-name)
+app=${3:-$proj}
+version=$(mvn-get-version)
+jar=$(mvn-get-jar $module)
+
+echo proj=$proj app=$app
+dest=$host:$app/$module-$version.jar
+echo copying $jar to $dest
+scp $jar $dest
+

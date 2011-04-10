@@ -1,0 +1,5 @@
+#!/bin/bash
+path=${1:-.}
+ver=$(xpath $path/pom.xml  '/project/artifactId/text()' 2>/dev/null)
+echo $ver
+

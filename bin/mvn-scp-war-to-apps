@@ -1,0 +1,11 @@
+#!/bin/bash
+ver=$(mvn-get-version)
+proj=$(mvn-get-proj-name)
+app=${1:-$proj}
+war=$(mvn-get-jetty-war)
+
+echo proj=$proj ver=$ver app=$app
+dest=wfe@nm-vp-int-wfe-apps-a.bbc.redbeemedia.net:$app/$proj-jetty-console-$ver.war
+echo copying $war to $dest
+scp $war $dest
+

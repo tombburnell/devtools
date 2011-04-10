@@ -1,0 +1,5 @@
+#!/bin/bash
+proj=$(mvn-get-proj-name)
+version=$(mvn-get-version)
+module=$1
+echo "${module}/target/$module-$version.jar"

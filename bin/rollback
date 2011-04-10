@@ -1,0 +1,39 @@
+#!/bin/bash
+
+source $HOME/.bash_profile
+
+echo path- $PATH
+echo java-home- $JAVA_HOME
+
+set -e
+
+path=${1:-.}
+
+echo path=$path
+
+SERVICE=$HOME/service
+
+proj=$(mvn-get-proj-name $path)
+
+echo proj=$proj
+
+dest=$SERVICE/real/$proj
+
+oldwar=$(readlink $dest/current.war)
+echo backup is $oldwar
+
+link="$dest/current.war"
+previous="$dest/previous.war"
+
+echo remove $link
+rm $link
+
+echo rename $previous to $link
+mv $previous $link
+
+svc -d $dest
+svc -u $dest
+tail -f $dest/log/main/current
+
+
+

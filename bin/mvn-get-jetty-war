@@ -1,0 +1,15 @@
+#!/bin/bash
+path=${1:-.}
+#echo path=$path
+proj=$(mvn-get-proj-name $path)
+#echo proj=$proj
+ver=$(mvn-get-version $path)
+file="$proj-$ver-jetty-console.war"
+#echo find $path -name $file
+for i in $(find $path -name $file); 
+do
+echo $i
+done
+
+#echo "$path/${proj}-war/target/$proj-jetty-console.war"
+#echo "$path/${proj}-war/target/$proj-jetty-console.war"

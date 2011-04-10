@@ -1,0 +1,45 @@
+#!/bin/bash
+
+source $HOME/.bash_profile
+set -e
+
+path=${1:-.}
+SERVICE=$HOME/service
+
+proj=$(mvn-get-proj-name $path)
+dest=$SERVICE/real/$proj
+echo path=$path
+echo proj=$proj
+
+cd $path
+
+git pull origin
+
+mvn clean install
+
+cd -
+
+warfile=$(mvn-get-jetty-war $proj)
+
+echo copying $warfile to $dest
+cp $warfile $dest
+
+
+oldwar=$(readlink $dest/current.war)
+echo backup is $oldwar
+
+link="$dest/current.war"
+previous="$dest/previous.war"
+
+echo remove $link
+rm $link
+
+echo rename $previous to $link
+mv $previous $link
+
+svc -d $dest
+svc -u $dest
+tail -f $dest/log/main/current
+
+
+

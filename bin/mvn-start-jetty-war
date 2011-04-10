@@ -1,0 +1,4 @@
+#!/bin/bash
+port=${1:-9999}
+war=$(mvn-get-jetty-war)
+exec java ${2} -jar $war --headless --port $port
