@@ -15,31 +15,46 @@ cd $path
 
 git pull origin
 
-mvn clean install
+#mvn clean install
 
 cd -
 
-warfile=$(mvn-get-jetty-war $proj)
+warfile=$(mvn-get-jetty-war $path)
 
-echo copying $warfile to $dest
-cp $warfile $dest
+if [ -f $warfile ]; then
+  echo found warfile $warfile
+else
+  echo warfile  '$warfile' does not exist
+  exit 1
+fi
+warfilebase=$(basename $warfile)
+warfiledest=$dest/$warfilebase
 
+echo copying $warfile to $warfiledest
+cp $warfile $warfiledest
 
-oldwar=$(readlink $dest/current.war)
-echo backup is $oldwar
+#oldwar=$(readlink $dest/current.war)
 
 link="$dest/current.war"
 previous="$dest/previous.war"
 
-echo remove $link
-rm $link
+if [ -f $link ]; then
+  echo remove $link
+  mv $link $previous
+  rm $link
+fi
 
-echo rename $previous to $link
-mv $previous $link
+echo linking $warfilepath to $warfiledest
+ln -s $warfiledest $link 
 
+echo stopping
 svc -d $dest
+
+echo starting
 svc -u $dest
-tail -f $dest/log/main/current
+
+echo tailing log
+stail  $proj
 
 
 

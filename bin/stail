@@ -1,0 +1,3 @@
+#!/bin/bash
+proj=$1
+exec tail -f $HOME/service/real/$proj/log/main/current | tai64nlocal

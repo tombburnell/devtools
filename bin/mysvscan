@@ -1,0 +1,25 @@
+#!/bin/bash
+
+set -e
+
+export DIR="$HOME/service/scan"
+cd /
+
+#shopt -s nullglob
+
+#svc -dx "$DIR"/* "$DIR"/*/log
+
+exec </dev/null
+exec >/dev/null
+exec 2>/dev/null
+
+#exec env - PATH=$PATH svscan "$DIR" 
+
+# Except readproctitle won't work on Solaris.  Ho hum.
+
+exec bash -c '
+exec env - PATH=$PATH svscan "$DIR" > >(
+       exec env - PATH=$PATH readproctitle service errors: ................................................................................................................................................................................................................................................................................................................................................................................................................
+) 2>&1
+'
+

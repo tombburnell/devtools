@@ -1,0 +1,6 @@
+#!/bin/sh
+
+# If svscan was hooked into inittab, as is the norm, then this script would not be needed
+
+exec /usr/sbin/lsof -c svscan -a $HOME/service/scan >/dev/null
+
